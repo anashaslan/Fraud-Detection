@@ -8,14 +8,8 @@ from sklearn.svm import SVC
 import joblib
 
 # Model Loading Functions
-def load_cnn_model(model_path):
-    return tf.keras.models.load_model(model_path)
-
-def load_random_forest(model_path):
-    return joblib.load(model_path)
-
-def load_svm_model(model_path):
-    return joblib.load(model_path)
+def load_cnn_model(model_file):
+    return tf.keras.models.load_model(fraud_detection_model.h5)
 
 # Image Preprocessing
 def preprocess_image(image, target_size=(224, 224)):
