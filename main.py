@@ -8,8 +8,14 @@ from sklearn.svm import SVC
 import joblib
 
 # Model Loading Functions
-def load_cnn_model(model_file):
-    return tf.keras.models.load_model(fraud_detection_model.h5)
+def load_cnn_model(model_file_cnn):
+    return tf.keras.models.load_model(model_file_cnn)
+
+def load_random_forest(model_file):
+    return joblib.load(model_file)
+
+def load_svm_model(model_file):
+    return joblib.load(model_file)
 
 # Image Preprocessing
 def preprocess_image(image, target_size=(224, 224)):
@@ -49,7 +55,7 @@ def main():
     
     if uploaded_file is not None:
         # Display uploaded image
-        st.image(uploaded_file, caption='Uploaded Image', use_column_width=True)
+        st.image(uploaded_file, caption='Uploaded Image', use_container_width=True)
         
         try:
             # Preprocess Image
