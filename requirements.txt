@@ -6,3 +6,4 @@ scikit-learn==1.2.0
 joblib==1.1.1
 tensorflow==2.12.0  # or the latest stable version compatible with your code
 cython==0.29.32
+altair==4.2.2

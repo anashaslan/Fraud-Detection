@@ -2,10 +2,10 @@ import streamlit as st
 import numpy as np
 import tensorflow as tf
 from PIL import Image
+import joblib
+from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-import joblib
 
 # Model Loading Functions
 def load_cnn_model(model_file_cnn):
