@@ -1,7 +1,8 @@
 # Additional Requirements ()
-# streamlit
-# numpy
-# tensorflow
-# pillow
-# scikit-learn
-# joblib
+streamlit==1.10.0
+numpy==1.22.0
+pillow==8.4.0
+scikit-learn==1.2.0
+joblib==1.1.1
+tensorflow==2.12.0rc0  # or the latest stable version compatible with your code
+cython==0.29.32
