@@ -2,7 +2,7 @@
 streamlit==1.41.0
 numpy==1.23.5
 pillow==9.0.1
-scikit-learn==1.6.0
+scikit-learn==1.2.0
 joblib==1.1.1
 tensorflow==2.12.0  # or the latest stable version compatible with your code
 cython==0.29.32
