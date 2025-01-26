@@ -6,6 +6,9 @@ import joblib
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Model Loading Functions
 def load_cnn_model(model_file_cnn):
@@ -84,6 +87,41 @@ def main():
         
         except Exception as e:
             st.error(f'Error processing image: {e}')
+
+    # Feature 1: Display Model Performance Metrics
+    st.header("Model Performance Metrics")
+    if st.checkbox("Show Performance Metrics"):
+        # Load test data (replace with your actual test data)
+        X_test = np.random.rand(100, 128 * 128 * 3)  # Example test data
+        y_test = np.random.randint(2, size=100)     # Example labels
+        
+        if model_type == 'Convolutional Neural Network':
+            y_pred = np.round(load_cnn_model('cnn_fraud_model.h5').predict(X_test.reshape(-1, 128, 128, 3))).flatten()
+        elif model_type == 'Random Forest':
+            y_pred = load_random_forest('random_forest_model.pkl').predict(X_test)
+        elif model_type == 'Support Vector Machine':
+            y_pred = load_svm_model('svm_model.pkl').predict(X_test)
+        
+        # Calculate metrics
+        accuracy = accuracy_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        f1 = f1_score(y_test, y_pred)
+        
+        # Display metrics
+        st.write(f"**Accuracy:** {accuracy:.2f}")
+        st.write(f"**Precision:** {precision:.2f}")
+        st.write(f"**Recall:** {recall:.2f}")
+        st.write(f"**F1-Score:** {f1:.2f}")
+        
+        # Confusion Matrix
+        st.subheader("Confusion Matrix")
+        cm = confusion_matrix(y_test, y_pred)
+        fig, ax = plt.subplots()
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
+        ax.set_xlabel('Predicted')
+        ax.set_ylabel('Actual')
+        st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
