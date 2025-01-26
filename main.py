@@ -18,7 +18,7 @@ def load_svm_model(model_file):
     return joblib.load(model_file)
 
 # Image Preprocessing
-def preprocess_image(image, target_size=(224, 224)):
+def preprocess_image(image, target_size=(128, 128)):
     img = Image.open(image)
     img = img.resize(target_size)
     img_array = np.array(img) / 255.0
