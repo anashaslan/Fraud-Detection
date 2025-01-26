@@ -7,3 +7,5 @@ joblib==1.4.2
 tensorflow>=2.12.0  # or the latest stable version compatible with your code
 cython==0.29.32
 altair==4.2.2
+seaborn>=0.11.2
+matplotlib==3.5.1
