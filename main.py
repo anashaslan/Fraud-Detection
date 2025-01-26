@@ -43,6 +43,7 @@ def predict_svm(model, image_array):
 # Streamlit App
 def main():
     st.title('Insurance Claims Fraud Detection')
+    st.write("Upload an image and select a model to predict whether it is Fraud or Non-Fraud.")
     
     # Model Selection
     model_type = st.selectbox(
