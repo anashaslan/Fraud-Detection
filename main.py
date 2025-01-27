@@ -11,34 +11,41 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Model Loading Functions
-def load_cnn_model(model_file_cnn):
-    return tf.keras.models.load_model(model_file_cnn)
+def load_logistic_regression(model_file):
+    return joblib.load(model_file)
 
 def load_random_forest(model_file):
     return joblib.load(model_file)
 
-def load_svm_model(model_file):
+def load_decision_tree(model_file):
     return joblib.load(model_file)
 
 # Image Preprocessing
-def preprocess_image(image, target_size=(128, 128)):
+def preprocess_image(image, target_size=(64, 64)):
+    """
+    Preprocess the image to match the input shape expected by the models.
+    - Resize the image to the target size.
+    - Normalize pixel values to [0, 1].
+    - Flatten the image to a 1D array.
+    """
     img = Image.open(image)
-    img = img.resize(target_size)
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
+    img = img.resize(target_size)  # Resize to match the expected input shape
+    img_array = np.array(img) / 255.0  # Normalize pixel values
+    img_array = img_array.reshape(1, -1)  # Flatten to 1D array
     return img_array
 
 # Prediction Functions
-def predict_cnn(model, image_array):
-    prediction = model.predict(image_array)
-    return 'Fraud' if prediction[0][0] > 0.5 else 'Non-Fraud'
+def predict_logistic_regression(model, image_array):
+    flattened_image = image_array.reshape(1, -1)
+    prediction = model.predict(flattened_image)
+    return 'Fraud' if prediction[0] == 1 else 'Non-Fraud'
 
 def predict_random_forest(model, image_array):
     flattened_image = image_array.reshape(1, -1)
     prediction = model.predict(flattened_image)
     return 'Fraud' if prediction[0] == 1 else 'Non-Fraud'
 
-def predict_svm(model, image_array):
+def predict_decision_tree(model, image_array):
     flattened_image = image_array.reshape(1, -1)
     prediction = model.predict(flattened_image)
     return 'Fraud' if prediction[0] == 1 else 'Non-Fraud'
@@ -51,7 +58,7 @@ def main():
     # Model Selection
     model_type = st.selectbox(
         'Select Prediction Model',
-        ['Convolutional Neural Network', 'Random Forest', 'Support Vector Machine']
+        ['Logistic Regression', 'Random Forest', 'Decision Tree']
     )
     
     # File Upload
@@ -66,17 +73,17 @@ def main():
             processed_image = preprocess_image(uploaded_file)
             
             # Load appropriate model
-            if model_type == 'Convolutional Neural Network':
-                model = load_cnn_model('cnn_fraud_model.h5')
-                prediction = predict_cnn(model, processed_image)
+            if model_type == 'Logistic Regression':
+                model = load_logistic_regression('logistic_regression_model.pkl')
+                prediction = predict_logistic_regression(model, processed_image)
             
             elif model_type == 'Random Forest':
                 model = load_random_forest('random_forest_model.pkl')
                 prediction = predict_random_forest(model, processed_image)
             
-            elif model_type == 'Support Vector Machine':
-                model = load_svm_model('svm_model.pkl')
-                prediction = predict_svm(model, processed_image)
+            elif model_type == 'Decision Tree':
+                model = load_decision_tree('decision_tree_model.pkl')
+                prediction = predict_decision_tree(model, processed_image)
             
             # Display Prediction
             st.subheader('Prediction Result')
@@ -87,41 +94,6 @@ def main():
         
         except Exception as e:
             st.error(f'Error processing image: {e}')
-
-    # Feature 1: Display Model Performance Metrics
-    st.header("Model Performance Metrics")
-    if st.checkbox("Show Performance Metrics"):
-        # Load test data (replace with your actual test data)
-        X_test = np.random.rand(100, 128 * 128 * 3)  # Example test data
-        y_test = np.random.randint(2, size=100)     # Example labels
-        
-        if model_type == 'Convolutional Neural Network':
-            y_pred = np.round(load_cnn_model('cnn_fraud_model.h5').predict(X_test.reshape(-1, 128, 128, 3))).flatten()
-        elif model_type == 'Random Forest':
-            y_pred = load_random_forest('random_forest_model.pkl').predict(X_test)
-        elif model_type == 'Support Vector Machine':
-            y_pred = load_svm_model('svm_model.pkl').predict(X_test)
-        
-        # Calculate metrics
-        accuracy = accuracy_score(y_test, y_pred)
-        precision = precision_score(y_test, y_pred)
-        recall = recall_score(y_test, y_pred)
-        f1 = f1_score(y_test, y_pred)
-        
-        # Display metrics
-        st.write(f"**Accuracy:** {accuracy:.2f}")
-        st.write(f"**Precision:** {precision:.2f}")
-        st.write(f"**Recall:** {recall:.2f}")
-        st.write(f"**F1-Score:** {f1:.2f}")
-        
-        # Confusion Matrix
-        st.subheader("Confusion Matrix")
-        cm = confusion_matrix(y_test, y_pred)
-        fig, ax = plt.subplots()
-        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', ax=ax)
-        ax.set_xlabel('Predicted')
-        ax.set_ylabel('Actual')
-        st.pyplot(fig)
 
 if __name__ == "__main__":
     main()
