@@ -1,5 +1,7 @@
 # Car Fraud Insurance Detection
 <p>Web application using Streamlit for Car Fraud Insurance Detection using Machine Learning models, which is CNN, SVM and Random Forest.</p>
+<p>A group project of team-member consists of <strong>Anas, Alyaa, Aisyah, and Ashikin.</strong></p>
+
 <p>Receive an image input from user, and will get the results.</p>
 
 <p align="center">
